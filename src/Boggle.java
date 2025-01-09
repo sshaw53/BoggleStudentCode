@@ -8,24 +8,22 @@ public class Boggle {
         ArrayList<String> goodWords = new ArrayList<String>();
 
         // Create a TST for the dictionary
-        TST dict_tst = new TST();
+        Trie dict_trie = new Trie();
 
         // For each word in the dictionary, insert it into the TST
         for (String word : dictionary) {
-            dict_tst.insert(word);
+            dict_trie.insert(word);
         }
+        String prefix = "";
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                String word = dfs(board, i, j, prefix, dict_trie);
 
-        // Find a way to traverse through the letters in board (BFS)
-
-        // 2D array of booleans, as I go down a path, I start setting each step in my path as true, if I pivot,
-        // I set that current spot as false and set something new as true - one of the next possible spots from the
-        // spot before
-
-        // Find a way to make sure that it knows there's more to go in the TST
-
-        // if not in dictionary TST and not in misspelled TST, add the word to misspelled TST
-        if (dict_tst.lookup(word)) {
-            goodWords.add(word);
+                // If it's in the dictionary, add the word to goodWords ArrayList
+                if (dict_trie.lookup(word)) {
+                    goodWords.add(word);
+                }
+            }
         }
 
         // Convert the list into a sorted array of strings, then return the array.
@@ -33,5 +31,32 @@ public class Boggle {
         goodWords.toArray(sol);
         Arrays.sort(sol);
         return sol;
+    }
+
+    public static String dfs(char[][] board, int i, int j, String prefix, Trie dict_trie) {
+        // Base cases: out of board, no longer a prefix, or already visited
+        if (i < 0 || j < 0 || i >= board.length || j >= board[0].length) { return prefix; }
+        //********** how to look for prefixes
+        if (dict_trie) { return prefix; }
+        if (board[i][j] == '-') { return prefix; }
+
+        char current_character = board[i][j];
+
+        // Mark the spot as visited
+        board[i][j] = '-';
+
+        String new_prefix = prefix + current_character;
+
+        // Call recursive algorithm
+        dfs(board, i + 1, j, new_prefix, dict_trie);
+        dfs(board, i - 1, j, new_prefix, dict_trie);
+        dfs(board, i, j + 1, new_prefix, dict_trie);
+        dfs(board, i, j - 1, new_prefix, dict_trie);
+
+        // Reset to be unvisited
+        board[i][j] = current_character;
+
+        //********** What do I return at the bottom...?
+        return "";
     }
 }
