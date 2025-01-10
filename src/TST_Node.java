@@ -1,6 +1,7 @@
 public class TST_Node {
     private char character;
     private boolean isWord;
+    private boolean isPrefix;
     private TST_Node left;
     private TST_Node right;
     private TST_Node center;
@@ -8,6 +9,7 @@ public class TST_Node {
     // Constructor
     public TST_Node() {
         isWord = false;
+        isPrefix = false;
         left = null;
         right = null;
         center = null;
@@ -17,6 +19,14 @@ public class TST_Node {
     // Other Functions (getters and setters)
     public boolean isWord() {
         return isWord;
+    }
+
+    public boolean isPrefix() {
+        return isPrefix;
+    }
+
+    public void setPrefix() {
+        isPrefix = true;
     }
 
     public void setWord(boolean word) {
